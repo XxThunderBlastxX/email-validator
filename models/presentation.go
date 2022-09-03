@@ -6,8 +6,9 @@ type ResponseErr struct {
 }
 
 type ResponseSuccess struct {
-	Status bool   `json:"status"`
-	Error  string `json:"error"`
+	Status   bool     `json:"status"`
+	Error    string   `json:"error"`
+	MxRecord []string `json:"mx_record"`
 }
 
 // PresentErr is a method to present error message
@@ -21,7 +22,8 @@ func (r *ResponseErr) PresentErr() *ResponseErr {
 // PresentSuccess is method to present success response
 func (r *ResponseSuccess) PresentSuccess() *ResponseSuccess {
 	return &ResponseSuccess{
-		Status: true,
-		Error:  "",
+		Status:   true,
+		Error:    "",
+		MxRecord: r.MxRecord,
 	}
 }
