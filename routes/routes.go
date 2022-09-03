@@ -14,4 +14,7 @@ func Router(app *fiber.App) {
 	//Fiber Monitor
 	app.Get("/monitor", middleware.RateLimiting(), monitor.New(monitor.Config{Title: "Chamting-API"}))
 
+	// Email validator route
+	app.Post("/valid", middleware.RateLimiting(), controller.ValidateEmail())
+
 }
