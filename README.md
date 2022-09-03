@@ -26,3 +26,36 @@ go build -o email-validator
 go build -o email-validator.exe
 ```
 
+### How to send email
+
+- You will have to ***POST*** request to `/valid` route with body as -
+```json
+{
+    "email": "Email"
+}
+```
+
+- Success Response we receive - 
+```json
+{
+    "status": true,
+    "error": "",
+    "contains_mx": true,
+    "mx_record": [
+        "Array of MX Records"
+    ],
+    "contains_spf": true,
+    "spf": "SPF Record",
+    "contains_dmarc": true,
+    "dmarc": "DMARC Record"
+}
+```
+
+- Error Response - 
+```json
+{
+    "status": false,
+    "error": "Error Message"
+}
+```
+
