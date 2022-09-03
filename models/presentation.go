@@ -6,9 +6,14 @@ type ResponseErr struct {
 }
 
 type ResponseSuccess struct {
-	Status   bool     `json:"status"`
-	Error    string   `json:"error"`
-	MxRecord []string `json:"mx_record"`
+	Status        bool     `json:"status"`
+	Error         string   `json:"error"`
+	ContainsMx    bool     `json:"contains_mx"`
+	MxRecord      []string `json:"mx_record"`
+	ContainsSpf   bool     `json:"contains_spf"`
+	Spf           string   `json:"spf"`
+	ContainsDmarc bool     `json:"contains_dmarc"`
+	Dmarc         string   `json:"dmarc"`
 }
 
 // PresentErr is a method to present error message
@@ -22,8 +27,13 @@ func (r *ResponseErr) PresentErr() *ResponseErr {
 // PresentSuccess is method to present success response
 func (r *ResponseSuccess) PresentSuccess() *ResponseSuccess {
 	return &ResponseSuccess{
-		Status:   true,
-		Error:    "",
-		MxRecord: r.MxRecord,
+		Status:        true,
+		Error:         "",
+		ContainsMx:    r.ContainsMx,
+		MxRecord:      r.MxRecord,
+		ContainsSpf:   r.ContainsSpf,
+		Spf:           r.Spf,
+		ContainsDmarc: r.ContainsDmarc,
+		Dmarc:         r.Dmarc,
 	}
 }

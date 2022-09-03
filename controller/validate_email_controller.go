@@ -12,6 +12,7 @@ func ValidateEmail() fiber.Handler {
 		var email models.EmailRequest
 		var resSuccess models.ResponseSuccess
 
+		// Parsing the data from body to the route
 		if err := ctx.BodyParser(&email); err != nil {
 			parseErr := models.ResponseErr{Error: err.Error()}
 			return ctx.Status(fiber.StatusUnprocessableEntity).JSON(parseErr.PresentErr())
@@ -28,8 +29,30 @@ func ValidateEmail() fiber.Handler {
 		// Checks for the mx-records for the domain
 		if mxRecord := utils.MxRecord(domain); mxRecord == nil {
 			resSuccess.MxRecord = nil
+			resSuccess.ContainsMx = false
 		} else {
 			resSuccess.MxRecord = append(resSuccess.MxRecord, mxRecord...)
+			resSuccess.ContainsMx = true
+		}
+
+		// Check if it contains spf record
+		containsSpf, spf := utils.SpfRecord(domain)
+		if containsSpf {
+			resSuccess.ContainsSpf = true
+			resSuccess.Spf = spf
+		} else {
+			resSuccess.ContainsSpf = false
+			resSuccess.Spf = spf
+		}
+
+		// Check if it contains dmarc record
+		containsDmarc, dmarc := utils.DmarcRecord(domain)
+		if containsDmarc {
+			resSuccess.ContainsDmarc = true
+			resSuccess.Dmarc = dmarc
+		} else {
+			resSuccess.ContainsDmarc = false
+			resSuccess.Dmarc = dmarc
 		}
 
 		return ctx.Status(fiber.StatusOK).JSON(resSuccess.PresentSuccess())
